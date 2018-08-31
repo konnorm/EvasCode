@@ -1,7 +1,7 @@
 @isTest
 global class HttpCalloutMockImp implements HttpCalloutMock {
-    protected Integer code;
-    protected String body;
+    Integer code; 
+    String body;
     
     global HttpCalloutMockImp(Integer code, String body){
         this.code = code;

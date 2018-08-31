@@ -31,59 +31,59 @@ public class passEmailedAttToVFTests {
         insert setExistingCG;
     }
         
-    @isTest
-    Static void testConversionSucceed(){
+    testMethod static void testConversionSucceed(){
         String step = '"step":"finish"';
         String step_percent = '"step_percent":100';
         String body = '{"example":"test", "Id":"testId", "minutes": 63, "data":{' + step + ',' + step_percent+', "output":{"url":"test@test"}, "content": "aGVhZGVyL24KMDItQVotQUEzMDYtUEJDLDQwCjAyLUFaLUFBNDA3LVBCQyw0MA=="}}';
         Test.startTest();
-        	Messaging.InboundEmail email = new Messaging.InboundEmail();
-        	Messaging.InboundEnvelope envolope = new Messaging.InboundEnvelope();
-        
-        	email.subject = 'testFileAttached';
-        	email.fromAddress = 'test@gmail.com';
-        	email.plainTextBody = 'Testing';
-        
-        	Messaging.InboundEmail.BinaryAttachment bAtt = new Messaging.InboundEmail.BinaryAttachment();
-        	bAtt.fileName = 'testbAtt';
-        	bAtt.body =  blob.valueOf('my attachment text');
-			bAtt.mimeTypeSubType = 'text/plain';
-        	email.binaryAttachments = new Messaging.InboundEmail.binaryAttachment[]{bAtt};
-        
-        	Test.setMock(HttpCalloutMock.class, new HttpCalloutMockImp(200, body));
-        	passEmailedAttToVF testEmail = new passEmailedAttToVF();
-        	testEmail.handleInboundEmail(email, envolope);
-        
-        	String hr = String.valueOf(Datetime.now().hour());
-         	String min = String.valueOf(Datetime.now().minute());
-            String sec = String.valueOf(Datetime.now().second()+1);
-        	String nextFireDay = String.valueOf(Datetime.now().day()+1);
-        	system.schedule('test', sec +' '+ min + ' '+ hr +' '+ nextFireDay + ' * ?', New checkCSVConvertion());
+		// I don't think all of the below has to be in the Test.startTest - stopTest area. Can you move some of it out? 
+		// The only stuff that should be in this area are things that directly use your classes of interest
+		Messaging.InboundEmail email = new Messaging.InboundEmail();
+		Messaging.InboundEnvelope envolope = new Messaging.InboundEnvelope();
+
+		email.subject = 'testFileAttached';
+		email.fromAddress = 'test@gmail.com';
+		email.plainTextBody = 'Testing';
+
+		Messaging.InboundEmail.BinaryAttachment bAtt = new Messaging.InboundEmail.BinaryAttachment();
+		bAtt.fileName = 'testbAtt';
+		bAtt.body =  blob.valueOf('my attachment text');
+		bAtt.mimeTypeSubType = 'text/plain';
+		email.binaryAttachments = new Messaging.InboundEmail.binaryAttachment[]{bAtt};
+
+		Test.setMock(HttpCalloutMock.class, new HttpCalloutMockImp(200, body));
+		passEmailedAttToVF testEmail = new passEmailedAttToVF();
+		testEmail.handleInboundEmail(email, envolope);
+
+		String hr = String.valueOf(Datetime.now().hour());
+		String min = String.valueOf(Datetime.now().minute());
+		String sec = String.valueOf(Datetime.now().second()+1);
+		String nextFireDay = String.valueOf(Datetime.now().day()+1);
+		System.schedule('test', sec +' '+ min + ' '+ hr +' '+ nextFireDay + ' * ?', new checkCSVConvertion());
             
         Test.stopTest();
     }
     
-    @isTest
-    Static void testConversionFaild(){
+    testMethod static void testConversionFaild(){
         String step = '"step":" "';
         String step_percent = '"step_percent":0';
         String body = '{"example":"test", "Id":"testId", "minutes": 63, "data":{' + step + ',' + step_percent+', "output":{"url":"test@test"}, "content": "aGVhZGVyL24KMDItQVotQUEzMDYtUEJDLDQwCjAyLUFaLUFBNDA3LVBCQyw0MA=="}}';
         Test.startTest();
-            Messaging.InboundEmail email = new Messaging.InboundEmail();
-        	Messaging.InboundEnvelope envolope = new Messaging.InboundEnvelope();
-        
-        	email.subject = 'testFileAttached';
-        	email.fromAddress = 'test@gmail.com';
-        	email.plainTextBody = 'Testing';
-        
-        	Messaging.InboundEmail.BinaryAttachment bAtt = new Messaging.InboundEmail.BinaryAttachment();
-        	bAtt.fileName = 'testbAtt';
-        	bAtt.body =  blob.valueOf('my attachment text');
-			bAtt.mimeTypeSubType = 'text/plain';
-        	email.binaryAttachments = new Messaging.InboundEmail.binaryAttachment[]{bAtt};
-        	Test.setMock(HttpCalloutMock.class, new HttpCalloutMockImp(401,body));
-        	passEmailedAttToVF testEmail = new passEmailedAttToVF();
-        	testEmail.handleInboundEmail(email, envolope);      	
+		Messaging.InboundEmail email = new Messaging.InboundEmail();
+		Messaging.InboundEnvelope envolope = new Messaging.InboundEnvelope();
+
+		email.subject = 'testFileAttached';
+		email.fromAddress = 'test@gmail.com';
+		email.plainTextBody = 'Testing';
+
+		Messaging.InboundEmail.BinaryAttachment bAtt = new Messaging.InboundEmail.BinaryAttachment();
+		bAtt.fileName = 'testbAtt';
+		bAtt.body =  blob.valueOf('my attachment text');
+		bAtt.mimeTypeSubType = 'text/plain';
+		email.binaryAttachments = new Messaging.InboundEmail.binaryAttachment[]{bAtt};
+		Test.setMock(HttpCalloutMock.class, new HttpCalloutMockImp(401,body));
+		passEmailedAttToVF testEmail = new passEmailedAttToVF();
+		testEmail.handleInboundEmail(email, envolope);      	
         Test.stopTest();
     }
 
